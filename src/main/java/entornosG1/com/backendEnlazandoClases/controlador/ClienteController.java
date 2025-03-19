@@ -42,7 +42,7 @@ public class ClienteController {
     }
     
     @PostMapping("/addClient")
-    public ResponseEntity<Cliente> agregarUsuario(@Valid @RequestBody Cliente cliente){
+    public ResponseEntity<Cliente> agregarCliente(@Valid @RequestBody Cliente cliente){
         Cliente obj = clienteService.nuevoCliente(cliente);
         return new ResponseEntity<>(obj, HttpStatus.OK);
     }
