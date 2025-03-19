@@ -25,16 +25,16 @@ public class Proveedor {
     @Column(name = "ciudad", nullable = true, length = 50)
     private String ciudad;
     
-    @Size(min = 10, max = 50, message = "La dirección DEBE tener entre 10 y 50 caracteres")
-    @Column(name = "direccion", nullable = true, length = 50)
+    @Size(min = 10, max = 100, message = "La dirección DEBE tener entre 10 y 100 caracteres")
+    @Column(name = "direccion", nullable = true, length = 100)
     private String direccion;
     
-    @Size(min = 3, max = 100, message = "El nombre DEBE estar entre 3 y 100 caracteres")
-    @Column(name = "nombre", nullable = true, length = 100)
+    @Size(min = 3, max = 75, message = "El nombre DEBE estar entre 3 y 75 caracteres")
+    @Column(name = "nombre", nullable = true, length = 75)
     private String nombre;
     
-    @Size(min = 10, max = 15, message = "El telefono DEBE estar entre 10 y 15 caracteres")
-    @Column(name = "telefono", nullable = true, length = 20)
+    @Size(min = 10, max = 10, message = "El telefono DEBE tener 10 caracteres")
+    @Column(name = "telefono", nullable = true, length = 15)
     private String telefono;
     
     @Size(min = 10, max = 10, message = "El NIT DEBE tener 10 caracteres")
