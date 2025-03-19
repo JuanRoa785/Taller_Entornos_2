@@ -56,7 +56,7 @@ public class ProductoController {
     
     @PutMapping("/updateProduct")
     public ResponseEntity<Producto> editar(@Valid @RequestBody Producto producto){
-        Producto obj = productoService.borrarProducto(producto.getId());
+        Producto obj = productoService.buscarProducto(producto.getId());
         if (obj != null) {
             
             if(ProveedorService.buscarProveedor(producto.getIdProveedor().getId()) == null){
