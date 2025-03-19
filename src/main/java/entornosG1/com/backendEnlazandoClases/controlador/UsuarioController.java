@@ -1,6 +1,7 @@
 package entornosG1.com.backendEnlazandoClases.controlador;
 
 import entornosG1.com.backendEnlazandoClases.modelo.Usuario;
+import entornosG1.com.backendEnlazandoClases.servicio.TipodocumentoService;
 import entornosG1.com.backendEnlazandoClases.servicio.UsuarioService;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -27,6 +28,9 @@ public class UsuarioController {
     @Autowired
     UsuarioService usuarioService;
     
+    @Autowired
+    TipodocumentoService TipodocumentoService;
+    
     @GetMapping("/list")
     public List<Usuario> cargarUsuario(){
         return usuarioService.getUsuarios();
@@ -42,7 +46,10 @@ public class UsuarioController {
     }
     
     @PostMapping("/addUser")
-    public ResponseEntity<Usuario> agregarUsuario(@Valid @RequestBody Usuario usuario){
+    public ResponseEntity<Usuario> agregarUsuario(@Valid @RequestBody Usuario usuario) {
+        if (TipodocumentoService.buscarTipodocumento(usuario.getIdTipodocumento().getId()) == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Tipo de Documento invalido");
+        }
         Usuario obj = usuarioService.nuevoUsuario(usuario);
         return new ResponseEntity<>(obj, HttpStatus.OK);
     }
@@ -51,6 +58,10 @@ public class UsuarioController {
     public ResponseEntity<Usuario> editar(@Valid @RequestBody Usuario usuario){
         Usuario obj = usuarioService.buscarUsuario(usuario.getId());
         if (obj != null) {
+            if (TipodocumentoService.buscarTipodocumento(usuario.getIdTipodocumento().getId()) == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Tipo de Documento invalido");
+            }
+            
             obj.setEmail(usuario.getEmail());
             obj.setIdTipodocumento(usuario.getIdTipodocumento());
             obj.setNombre(usuario.getNombre());
@@ -59,9 +70,8 @@ public class UsuarioController {
             obj.setPassword(usuario.getPassword());
             usuarioService.nuevoUsuario(obj);
             return new ResponseEntity<>(obj, HttpStatus.OK);
-        } else{
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado");
-        }  
+        }
+         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado");
     }
     
     @DeleteMapping("/deleteUser/{id}")
@@ -70,8 +80,7 @@ public class UsuarioController {
         if(obj != null) {
             usuarioService.borrarUsuario(id);
             return new ResponseEntity<>(obj, HttpStatus.OK);
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado");
         }
+         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado");
     }
 }

@@ -2,6 +2,7 @@ package entornosG1.com.backendEnlazandoClases.controlador;
 
 import entornosG1.com.backendEnlazandoClases.modelo.Cliente;
 import entornosG1.com.backendEnlazandoClases.servicio.ClienteService;
+import entornosG1.com.backendEnlazandoClases.servicio.TipodocumentoService;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class ClienteController {
     @Autowired
     ClienteService clienteService;
     
+    @Autowired
+    TipodocumentoService TipodocumentoService;
+    
     @GetMapping("/list")
     public List<Cliente> getClientes(){
         return clienteService.getClientes();
@@ -42,7 +46,10 @@ public class ClienteController {
     }
     
     @PostMapping("/addClient")
-    public ResponseEntity<Cliente> agregarCliente(@Valid @RequestBody Cliente cliente){
+    public ResponseEntity<Cliente> agregarCliente(@Valid @RequestBody Cliente cliente) {
+        if (TipodocumentoService.buscarTipodocumento(cliente.getIdTipodocumento().getId()) == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Tipo de Documento invalido");
+        }
         Cliente obj = clienteService.nuevoCliente(cliente);
         return new ResponseEntity<>(obj, HttpStatus.OK);
     }
@@ -51,7 +58,10 @@ public class ClienteController {
     public ResponseEntity<Cliente> editar(@Valid @RequestBody Cliente cliente){
         Cliente obj = clienteService.buscarCliente(cliente.getId());
         if (obj != null) {
-           
+            if (TipodocumentoService.buscarTipodocumento(cliente.getIdTipodocumento().getId()) == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Tipo de Documento invalido");
+            }
+            
             obj.setIdTipodocumento(cliente.getIdTipodocumento());
             obj.setNumeroDocumento(cliente.getNumeroDocumento());
             obj.setDireccion(cliente.getDireccion());
@@ -61,9 +71,8 @@ public class ClienteController {
             
             clienteService.nuevoCliente(obj);
             return new ResponseEntity<>(obj, HttpStatus.OK);
-        } else{
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente no encontrado");
-        }  
+        }
+         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente no encontrado");
     }
     
     @DeleteMapping("/deleteClient/{id}")
@@ -72,8 +81,7 @@ public class ClienteController {
         if(obj != null) {
             clienteService.borrarCliente(id);
             return new ResponseEntity<>(obj, HttpStatus.OK);
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente no encontrado");
         }
+         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente no encontrado");
     }
 }
