@@ -1,5 +1,5 @@
-# 📦 Taller #2 - Entornos de Programación G1 - UIS: 
-# Basic Spring Boot CRUD Application Connecting Tables
+# <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg" alt="Java Logo" width="40" height="40"/> Taller #2 - Entornos de Programación G1 - UIS: 
+# Spring Boot CRUD Application Linking Multiple Tables
 
 This repository contains a basic **Spring Boot** application showcasing the integration of several database tables and exposing **RESTful endpoints** to perform standard **CRUD** (Create, Read, Update, Delete) operations.
 
